@@ -18,7 +18,6 @@ const Login = () => {
 
   const handleLogin = async (googleData) => {
     const { tokenId, profileObj } = googleData;
-    console.log(tokenId, profileObj);
     dispatch(login({ tokenId, profileObj }));
     navigate('/');
   };

@@ -107,12 +107,6 @@ const FundWallet = () => {
                     >
                       <Input placeholder="Amount" onChange={(e) => setAmount(e.target.value)} />
                     </Form.Item>
-
-                    <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                      <Button type="primary" htmlType="submit">
-                        Submit
-                      </Button>
-                    </Form.Item>
                   </Form>
                 </Modal>
               </Col>
