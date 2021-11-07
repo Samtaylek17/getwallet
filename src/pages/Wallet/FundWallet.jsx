@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Layout, Row, Col, Modal, Button, Table, Input, Form, Card } from 'antd';
+import { Layout, Row, Col, Modal, Button, InputNumber, Form, Card, Select } from 'antd';
 import Title from 'antd/lib/typography/Title';
 import Sidebar from '../../components/Sidebar';
 import columns from './column';
 import { fetchSingleWallet, createWalletAction } from '../../slices/walletSlice';
+
+const { Option } = Select;
 
 const FundWallet = () => {
   const [walletData, setWalletData] = useState({});
@@ -87,19 +89,22 @@ const FundWallet = () => {
                     autoComplete="off"
                   >
                     <Form.Item
-                      label="Username"
-                      name="username"
-                      rules={[{ required: true, message: 'Please input your username!' }]}
+                      name="select"
+                      label="Select"
+                      hasFeedback
+                      rules={[{ required: true, message: 'Please select your country!' }]}
                     >
-                      <Input />
+                      <Select placeholder="Please select a Currency">
+                        <Option value="NGN">NGN</Option>
+                      </Select>
                     </Form.Item>
 
                     <Form.Item
-                      label="Password"
-                      name="password"
-                      rules={[{ required: true, message: 'Please input your password!' }]}
+                      label="Amount"
+                      name="amount"
+                      rules={[{ required: true, message: 'Please enter amount!' }]}
                     >
-                      <Input.Password />
+                      <InputNumber />
                     </Form.Item>
 
                     <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
