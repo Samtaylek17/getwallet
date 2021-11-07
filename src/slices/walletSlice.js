@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { createWallet, getWallet, getAllWallets } from '../api/endpoints';
+import { createWallet, getWallet, getAllWallets, addMoneyToWallet } from '../api/endpoints';
 
 const walletInitialState = {
   walletList: [],
@@ -86,3 +86,15 @@ export const fetchSingleWallet = (id) => async (dispatch) => {
     dispatch(getWalletFailure(err));
   }
 };
+
+export const fundWallet =
+  ({ walletId, currency, amount }) =>
+  async (dispatch) => {
+    dispatch(getWalletStart());
+    try {
+      const funded = await addMoneyToWallet({ walletId, currency, amount });
+      dispatch(getWalletSuccess(funded.data.data));
+    } catch (err) {
+      dispatch(getWalletFailure(err));
+    }
+  };

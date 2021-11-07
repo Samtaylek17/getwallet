@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Layout, Row, Col, Modal, Button, InputNumber, Form, Card, Select } from 'antd';
+import { Layout, Row, Col, Modal, Button, Input, Form, Card, Select } from 'antd';
 import Title from 'antd/lib/typography/Title';
 import Sidebar from '../../components/Sidebar';
 import columns from './column';
-import { fetchSingleWallet, createWalletAction } from '../../slices/walletSlice';
+import { fetchSingleWallet, fundWallet } from '../../slices/walletSlice';
 
 const { Option } = Select;
 
@@ -13,7 +13,8 @@ const FundWallet = () => {
   const [walletData, setWalletData] = useState({});
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [email, setEmail] = useState('');
+  const [currency, setCurrency] = useState('');
+  const [amount, setAmount] = useState('');
 
   const { id } = useParams();
 
@@ -35,7 +36,7 @@ const FundWallet = () => {
     setIsModalVisible(true);
   };
   const handleOk = () => {
-    dispatch(createWalletAction({ email }));
+    dispatch(fundWallet({ id, currency, amount }));
     setConfirmLoading(true);
     setTimeout(() => {
       setIsModalVisible(false);
@@ -88,13 +89,13 @@ const FundWallet = () => {
                     onFinish={handleOk}
                     autoComplete="off"
                   >
-                    <Form.Item
-                      name="select"
-                      label="Select"
-                      hasFeedback
-                      rules={[{ required: true, message: 'Please select your country!' }]}
-                    >
-                      <Select placeholder="Please select a Currency">
+                    <Form.Item name="Currency" label="Currency">
+                      <Select
+                        options={[{ value: 'NGN', label: 'NGN' }]}
+                        defaultValue="NGN"
+                        placeholder="Please select a Currency"
+                        onChange={(e) => setCurrency(e.target.value)}
+                      >
                         <Option value="NGN">NGN</Option>
                       </Select>
                     </Form.Item>
@@ -104,7 +105,7 @@ const FundWallet = () => {
                       name="amount"
                       rules={[{ required: true, message: 'Please enter amount!' }]}
                     >
-                      <InputNumber />
+                      <Input placeholder="Amount" onChange={(e) => setAmount(e.target.value)} />
                     </Form.Item>
 
                     <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
