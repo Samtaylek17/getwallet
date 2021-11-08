@@ -1,5 +1,5 @@
-import React, { Suspense, lazy, useAuth } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import React, { Suspense, lazy } from 'react';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import { Spin } from 'antd';
 import { useSelector } from 'react-redux';
 import isEmpty from 'lodash/isEmpty';
@@ -12,8 +12,24 @@ const FundWallet = lazy(() => import('./pages/Wallet/FundWallet'));
 const AppRoutes = () => {
   const { isAuthenticated, user } = useSelector((state) => state.user);
 
-  function PrivateRoute({ children }) {
-    return isAuthenticated && user ? children : <Navigate to="/login" />;
+  function PrivateRoute({ component: Component, ...rest }) {
+    return (
+      <Route
+        {...rest}
+        render={({ location }) =>
+          isAuthenticated && user ? (
+            <Component />
+          ) : (
+            <Redirect
+              to={{
+                pathname: '/login',
+                state: { from: location },
+              }}
+            />
+          )
+        }
+      />
+    );
   }
 
   const styles = {
@@ -34,40 +50,16 @@ const AppRoutes = () => {
   return (
     <Router>
       <Suspense fallback={<Spinner />}>
-        <Routes>
-          <Route
-            exact
-            path="/"
-            element={
-              <PrivateRoute>
-                <Dashboard />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            exact
-            path="/wallet"
-            element={
-              <PrivateRoute>
-                <Wallet />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            exact
-            path="/wallet/:id"
-            element={
-              <PrivateRoute>
-                <FundWallet />
-              </PrivateRoute>
-            }
-          />
+        <Switch>
+          <PrivateRoute exact path="/" component={Dashboard} />
+          <PrivateRoute exact path="/wallet" component={Wallet} />
+          <PrivateRoute exact path="/wallet/:id" component={FundWallet} />
           <Route
             exact
             path="/login"
-            element={isAuthenticated && !isEmpty(user) ? <Navigate to="/" /> : <Login />}
+            render={() => (isAuthenticated && !isEmpty(user) ? <Redirect to="/" /> : <Login />)}
           />
-        </Routes>
+        </Switch>
       </Suspense>
     </Router>
   );

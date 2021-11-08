@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-labels */
 /* eslint-disable no-restricted-syntax */
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Layout, Row, Col, Modal, Button, Table, Input, Form } from 'antd';
 import Title from 'antd/lib/typography/Title';
@@ -16,7 +16,7 @@ const Wallet = () => {
   const [email, setEmail] = useState('');
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const history = useHistory();
 
   const { Content } = Layout;
 
@@ -32,7 +32,7 @@ const Wallet = () => {
   }, []);
 
   const viewWallet = (walletId) => {
-    navigate(`/wallet/${walletId}`);
+    history.push(`/wallet/${walletId}`);
   };
 
   const showModal = () => {

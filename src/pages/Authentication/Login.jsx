@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import GoogleLogin from 'react-google-login';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { login } from '../../slices/authSlice';
 
 const Login = () => {
@@ -10,7 +10,7 @@ const Login = () => {
   );
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const history = useHistory();
 
   const handleFailure = (result) => {
     alert(result);
@@ -19,7 +19,7 @@ const Login = () => {
   const handleLogin = async (googleData) => {
     const { tokenId, profileObj } = googleData;
     dispatch(login({ tokenId, profileObj }));
-    navigate('/');
+    history.push('/');
   };
 
   return (
